@@ -3,17 +3,18 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    {% for result in Driver %}
-        {{ result.username }}
-    {% endfor %}
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-   <p> Sei un amministratore! <a href="{% url 'admin:index' %}">Gestisci qui i tuoi database</a></p>
-  <p><a href="{% url 'logout' %}">Log Out</a></p>
+  Ciao {{ user.username }}!
+    <p> Sei un amministratore! <a href="{% url 'admin:index' %}">Gestisci qui i tuoi database</a></p>
+    <p><a href="{% url 'logout' %}">Log Out</a></p>
 {% elif driver %}
-      <p> Hi {{ driver.username }}</p>
+    <p> Ciao! Visualizza i punti vendita che oggi dovrai raggiungere! </p>
+    <p><a href="{% url 'negozi' %}">Scopri i Punti Vendita del giro</a></p>
+    <p><a href="{% url 'logout' %}">Log Out</a></p>
 {% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
+    <p>You are not logged in</p>
+    <a href="{% url 'loginDriver' %}">Log In come Autista</a> <br>
+    <a href="{% url 'login' %}">Log In come Amministratore</a>
+
 {% endif %}
 {% endblock %}

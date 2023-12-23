@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .login import LoginForm
-from .models import Driver
+from .models import Driver, Market
 
 
 def index(request):
@@ -20,7 +20,7 @@ def user_login(request):
 
             if queryset.exists():
                 # Do something if the values exist in the database
-                return render(request, 'home.html', {'driver': queryset})
+                return render(request, 'home.html', {'driver': queryset.values_list('nome')})
             else:
                 # Do something if the values don't exist in the database
                 return render(request, 'login.html', {'form': form, 'error': 'Invalid login credentials'})
@@ -28,3 +28,9 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
+
+def driver_markets(request):
+    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
+
+def driver_deliveries():
+    pass

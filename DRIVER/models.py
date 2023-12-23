@@ -12,10 +12,13 @@ class Market(models.Model):
     id_negozio = models.PositiveIntegerField(unique=True)
     nome_negozio = models.CharField(max_length=50)
     proprietario = models.CharField(max_length=50)
+    cellulare = models.CharField(max_length=10)
     indirizzo = models.CharField(max_length=100)
     latitudine = models.DecimalField(max_digits=17, decimal_places=15)
     longitudine = models.DecimalField(max_digits=17, decimal_places=15)
 
+    def __str__(self):# to string di java
+        return str(self.id_negozio) + ' ' + self.nome_negozio + ' ' + self.cellulare
 
 class Driver(models.Model):
     id_autista = models.PositiveIntegerField(unique=True)
