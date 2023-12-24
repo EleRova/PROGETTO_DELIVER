@@ -20,7 +20,7 @@ def user_login(request):
 
             if queryset.exists():
                 # Do something if the values exist in the database
-                return render(request, 'home.html', {'driver': queryset.values_list('nome')})
+                return render(request, 'home.html', {'driver': queryset.first()})
             else:
                 # Do something if the values don't exist in the database
                 return render(request, 'login.html', {'form': form, 'error': 'Invalid login credentials'})

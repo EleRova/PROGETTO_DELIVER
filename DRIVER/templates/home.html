@@ -1,20 +1,22 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Home{% endblock %}
-
 {% block content %}
 {% if user.is_authenticated %}
   Ciao {{ user.username }}!
     <p> Sei un amministratore! <a href="{% url 'admin:index' %}">Gestisci qui i tuoi database</a></p>
     <p><a href="{% url 'logout' %}">Log Out</a></p>
 {% elif driver %}
-    <p> Ciao! Visualizza i punti vendita che oggi dovrai raggiungere! </p>
+    <p> Ciao {{ driver.nome }}! Visualizza i punti vendita che oggi dovrai raggiungere! </p>
     <p><a href="{% url 'negozi' %}">Scopri i Punti Vendita del giro</a></p>
     <p><a href="{% url 'logout' %}">Log Out</a></p>
 {% else %}
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <div class="container">
     <p>You are not logged in</p>
-    <a href="{% url 'loginDriver' %}">Log In come Autista</a> <br>
-    <a href="{% url 'login' %}">Log In come Amministratore</a>
+    <a href="{% url 'loginDriver' %}" class="button" id="button1">Log In come Autista</a> <br>
+    <a href="{% url 'login' %}" class="button" id="button2">Log In come Amministratore</a>
+    </div>
 
 {% endif %}
 {% endblock %}
