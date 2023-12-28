@@ -10,15 +10,19 @@
 		<link rel="stylesheet" href="{% static 'main.css' %}" />
     <title>Negozi Giro</title>
 </head>
-<body>
-<section class="box special features">
+<body id="negozi">
+<section class="box special features" style="margin-bottom: 0px;">
 
                         {% for result in market %}
                             <div class="features-row">
                                 <section>
                                     <span class="icon solid major fa-bolt accent{{ result.id_negozio }}"></span>
                                     <h3>{{ result.nome_negozio }}</h3>
-                                    <p>Integer volutpat ante et accumsan commophasellus sed aliquam feugiat lorem aliquet ut enim rutrum phasellus iaculis accumsan dolore magna aliquam veroeros.</p>
+                                    <p> {{ result.indirizzo }}</p>
+                                    <p> Fascia di consegna: {{ result.inizio_fascia_consegna }} - {{ result.fine_fascia_consegna }} </p>
+                                    <ul class="actions special">
+                                    <li><a href="#" class="button primary">Consegna Effettuata</a></li>
+                                        </ul>
                                 </section>
                             </div>
                         {% endfor %}

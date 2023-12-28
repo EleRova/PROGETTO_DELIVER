@@ -16,6 +16,8 @@ class Market(models.Model):
     indirizzo = models.CharField(max_length=100)
     latitudine = models.DecimalField(max_digits=17, decimal_places=15)
     longitudine = models.DecimalField(max_digits=17, decimal_places=15)
+    inizio_fascia_consegna = models.PositiveIntegerField()
+    fine_fascia_consegna = models.PositiveIntegerField()
 
     def __str__(self):# to string di java
         return str(self.id_negozio) + ' ' + self.nome_negozio + ' ' + self.cellulare

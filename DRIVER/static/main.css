@@ -80,7 +80,9 @@
 
 /* Basic */
 
-
+ body#negozi {
+	 background-color: #ffffff;
+ }
 
 	body {
 		-ms-overflow-style: scrollbar;
@@ -2843,7 +2845,7 @@
 		input[type="reset"].primary,
 		input[type="button"].primary,
 		.button.primary {
-			background-color: #e89980;
+			background-color: #071f42;
 			color: #ffffff !important;
 		}
 
@@ -2851,14 +2853,14 @@
 			input[type="reset"].primary:hover,
 			input[type="button"].primary:hover,
 			.button.primary:hover {
-				background-color: #ecaa96;
+				background-color: #6a93c2;
 			}
 
 			input[type="submit"].primary:active,
 			input[type="reset"].primary:active,
 			input[type="button"].primary:active,
 			.button.primary:active {
-				background-color: #e4886a;
+				background-color: #0e3c85;
 			}
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
