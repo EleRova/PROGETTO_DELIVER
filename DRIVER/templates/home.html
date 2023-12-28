@@ -1,22 +1,115 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}Home{% endblock %}
 {% block content %}
 {% if user.is_authenticated %}
-  Ciao {{ user.username }}!
-    <p> Sei un amministratore! <a href="{% url 'admin:index' %}">Gestisci qui i tuoi database</a></p>
-    <p><a href="{% url 'logout' %}">Log Out</a></p>
-{% elif driver %}
-    <p> Ciao {{ driver.nome }}! Visualizza i punti vendita che oggi dovrai raggiungere! </p>
-    <p><a href="{% url 'negozi' %}">Scopri i Punti Vendita del giro</a></p>
-    <p><a href="{% url 'logout' %}">Log Out</a></p>
-{% else %}
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-    <div class="container">
-    <p>You are not logged in</p>
-    <a href="{% url 'loginDriver' %}" class="button" id="button1">Log In come Autista</a> <br>
-    <a href="{% url 'login' %}" class="button" id="button2">Log In come Amministratore</a>
-    </div>
 
+
+
+    <html>
+	<head>
+		<title>Amministratore</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'main.css' %}" />
+	</head>
+	<body class="landing is-preload">
+		<div id="page-wrapper">
+
+
+			<!-- Main -->
+				<section id="banner">
+						<h2>Ciao {{ user.username }}!</h2>
+						<p>Sei un amministratore!</p>
+
+
+									<ul class="actions special">
+										<li><a href="{% url 'admin:index' %}" class="button primary">Gestisci qui i tuoi database</a></li>
+                                        <li><a href="{% url 'logout' %}" class="button">Log Out</a></li>
+									</ul>
+				</section>
+
+
+
+		</div>
+	</body>
+</html>
+
+
+{% elif driver %}
+    <!DOCTYPE HTML>
+<!--
+	Alpha by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Autista</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'main.css' %}" />
+	</head>
+	<body class="landing is-preload">
+		<div id="page-wrapper">
+
+
+			<!-- Main -->
+				<section id="banner">
+						<h2>Ciao {{ driver.nome }}!</h2>
+						<p>Visualizza i punti vendita che oggi dovrai raggiungere!</p>
+
+
+									<ul class="actions special">
+										<li><a href="{% url 'negozi' %}" class="button primary">Scopri i Punti Vendita del giro</a></li>
+                                        <li><a href="{% url 'logout' %}" class="button">Log Out</a></li>
+									</ul>
+				</section>
+
+
+
+		</div>
+	</body>
+</html>
+{% else %}
+
+<!--
+	Alpha by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'main.css' %}" />
+	</head>
+	<body class="landing is-preload">
+		<div id="page-wrapper">
+
+
+
+			<!-- Banner -->
+				<section id="banner">
+					<h2>DELIVER</h2>
+					<p>L’applicazione “Deliver” riguarda l’ambito della Supply Chain, in particolare l’Area Trasporti.</p>
+                    <ul class="actions special">
+						<li><a href="{% url 'loginDriver' %}" class="button primary">Autista</a></li>
+						<li><a href="{% url 'login' %}" class="button">Amministratore</a></li>
+					</ul>
+				</section>
+
+
+
+
+
+
+		</div>
+
+
+
+	</body>
+</html>
 {% endif %}
 {% endblock %}

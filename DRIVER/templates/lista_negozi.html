@@ -1,12 +1,32 @@
+
+
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'main.css' %}" />
+    <title>Negozi Giro</title>
 </head>
 <body>
-{% for result in market %}
-    {{ result.nome_negozio }}
-{% endfor %}
+<section class="box special features">
+
+                        {% for result in market %}
+                            <div class="features-row">
+                                <section>
+                                    <span class="icon solid major fa-bolt accent{{ result.id_negozio }}"></span>
+                                    <h3>{{ result.nome_negozio }}</h3>
+                                    <p>Integer volutpat ante et accumsan commophasellus sed aliquam feugiat lorem aliquet ut enim rutrum phasellus iaculis accumsan dolore magna aliquam veroeros.</p>
+                                </section>
+                            </div>
+                        {% endfor %}
+					</section>
 </body>
 </html>
+
+{% endblock %}
+
+
+
