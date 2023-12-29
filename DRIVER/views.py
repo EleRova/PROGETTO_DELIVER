@@ -5,6 +5,10 @@ from django.contrib.auth import authenticate, login
 from .login import LoginForm
 from .models import Driver, Market
 
+import random
+import telegram_send
+
+
 
 def index(request):
     return HttpResponse("Hello, world. You're at the PCC index.")
@@ -32,8 +36,19 @@ def user_login(request):
 def driver_markets(request):
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
 
-def driver_deliveries():
-    pass
+def driver_deliveries(request):
+    valore_temp = random.uniform(0, 5)
+    print(valore_temp)
+    if valore_temp > -7:
+        print("Sveglia")
+        telegram_send.send(messages=["La temperatura è fuori range!"])
+    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
 
 def driver_enddeliveries(request):
     return render(request, 'fine_giro.html')
+
+def temp():
+    valore_temp = random.uniform(-20,5)
+    if valore_temp > -7:
+        telegram_send.send(messages=["La temperatura è fuori range!"])
+

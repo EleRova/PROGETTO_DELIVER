@@ -41,3 +41,8 @@ class Trip(models.Model):
     negozio = models.ForeignKey(Market, on_delete=models.CASCADE)
     data_partenza = models.DateTimeField()
     ritardo =models.BooleanField(default=False)
+
+
+
+class Temperature(models.Model):
+    temperatura_registrata = models.FloatField()

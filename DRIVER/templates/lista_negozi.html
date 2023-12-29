@@ -19,7 +19,7 @@
                             {% endif %}
 
                                 <section>
-                                    <span class="icon solid major fa-bolt accent{{ result.id_negozio }}"></span>
+                                    <a href="{% url 'consegne' %}"><span class="icon solid major fa-bolt accent{{ result.id_negozio }}"></span></a>
                                     <h3>{{ result.nome_negozio }}</h3>
                                     <p> {{ result.indirizzo }}</p>
                                     <p> Fascia di consegna: {{ result.inizio_fascia_consegna }} - {{ result.fine_fascia_consegna }} </p>
