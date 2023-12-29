@@ -34,3 +34,6 @@ def driver_markets(request):
 
 def driver_deliveries():
     pass
+
+def driver_enddeliveries(request):
+    return render(request, 'fine_giro.html')

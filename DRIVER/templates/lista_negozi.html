@@ -1,5 +1,5 @@
 
-
+{% load modulo %}
 {% load static %}
 {% block content %}
 <!DOCTYPE html>
@@ -14,17 +14,23 @@
 <section class="box special features" style="margin-bottom: 0px;">
 
                         {% for result in market %}
-                            <div class="features-row">
+                            {% if forloop.counter|modulo:2 == 1  %}
+                                <div class="features-row">
+                            {% endif %}
+
                                 <section>
                                     <span class="icon solid major fa-bolt accent{{ result.id_negozio }}"></span>
                                     <h3>{{ result.nome_negozio }}</h3>
                                     <p> {{ result.indirizzo }}</p>
                                     <p> Fascia di consegna: {{ result.inizio_fascia_consegna }} - {{ result.fine_fascia_consegna }} </p>
                                     <ul class="actions special">
-                                    <li><a href="#" class="button primary">Consegna Effettuata</a></li>
+                                    <li><a href="{% url 'fine' %}" class="button primary">Consegna Effettuata</a></li>
                                         </ul>
                                 </section>
-                            </div>
+                            {% if forloop.counter|modulo:2 == 0  %}
+                                </div>
+                            {% endif %}
+
                         {% endfor %}
 					</section>
 </body>
