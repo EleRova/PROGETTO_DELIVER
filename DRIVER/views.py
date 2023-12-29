@@ -4,9 +4,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .login import LoginForm
 from .models import Driver, Market
+import subprocess
 
 import random
-import telegram_send
 
 
 
@@ -37,18 +37,12 @@ def driver_markets(request):
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
 
 def driver_deliveries(request):
-    valore_temp = random.uniform(0, 5)
-    print(valore_temp)
+    valore_temp = random.uniform(-20, 5)
     if valore_temp > -7:
-        print("Sveglia")
-        telegram_send.send(messages=["La temperatura è fuori range!"])
+        subprocess.run(['telegram-send', "La temperatura è fuori range!"], check=True)
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
 
 def driver_enddeliveries(request):
     return render(request, 'fine_giro.html')
 
-def temp():
-    valore_temp = random.uniform(-20,5)
-    if valore_temp > -7:
-        telegram_send.send(messages=["La temperatura è fuori range!"])
 
