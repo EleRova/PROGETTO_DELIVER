@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{% static 'main.css' %}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Negozi Giro</title>
 </head>
 <body id="negozi">
@@ -19,12 +20,12 @@
                             {% endif %}
 
                                 <section>
-                                    <a href="{% url 'consegne' %}"><span class="icon solid major fa-bolt accent{{ result.id_negozio }}"></span></a>
+                                    <a class='fa fa-map-marker' style="font-size:48px;" href="https://www.google.com/maps?q={{ result.latitudine }},{{ result.longitudine }}" target = "_blank"></a>
                                     <h3>{{ result.nome_negozio }}</h3>
                                     <p> {{ result.indirizzo }}</p>
                                     <p> Fascia di consegna: {{ result.inizio_fascia_consegna }} - {{ result.fine_fascia_consegna }} </p>
                                     <ul class="actions special">
-                                    <li><a href="{% url 'fine' %}" class="button primary">Consegna Effettuata</a></li>
+                                    <li><a href="#" class="button primary" onclick="handleButtonClick(this)">Consegna Effettuata</a></li>
                                         </ul>
                                 </section>
                             {% if forloop.counter|modulo:2 == 0  %}
@@ -33,6 +34,27 @@
 
                         {% endfor %}
 					</section>
+<script>
+    var buttons = document.querySelectorAll('a.button');
+    var currentButtonIndex = 0;
+
+    function handleButtonClick(clickedButton) {
+        buttons[currentButtonIndex].classList.add('disabled');
+
+        currentButtonIndex++;
+
+        if (currentButtonIndex < buttons.length) {
+            buttons[currentButtonIndex].classList.remove('disabled');
+        }
+        else {
+            window.location.href = '{% url 'fine' %}';
+        }
+    }
+
+    for (var i = 1; i < buttons.length; i++){
+        buttons[i].classList.add('disabled');
+    }
+</script>
 </body>
 </html>
 
