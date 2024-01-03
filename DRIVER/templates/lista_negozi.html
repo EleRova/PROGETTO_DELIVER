@@ -39,17 +39,20 @@
     var currentButtonIndex = 0;
 
     function handleButtonClick(clickedButton) {
-        buttons[currentButtonIndex].classList.add('disabled');
 
-        currentButtonIndex++;
 
-        if (currentButtonIndex < buttons.length) {
-            buttons[currentButtonIndex].classList.remove('disabled');
-        }
-        else {
-            window.location.href = '{% url 'fine' %}';
-        }
+            buttons[currentButtonIndex].classList.add('disabled');
+
+            currentButtonIndex++;
+            if (currentButtonIndex < buttons.length) {
+                buttons[currentButtonIndex].classList.remove('disabled');
+            }
+            else {
+                window.location.href = '{% url 'fine' %}';
+            }
+
     }
+
 
     for (var i = 1; i < buttons.length; i++){
         buttons[i].classList.add('disabled');
