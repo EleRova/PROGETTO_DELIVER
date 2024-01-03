@@ -3,10 +3,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .login import LoginForm
-from .models import Driver, Market
+from .models import Driver, Market, Temperature
 import subprocess
 
 import random
+import threading
+import time
 
 
 
@@ -34,15 +36,28 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 def driver_markets(request):
+    t.start()
+
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
 
-def driver_deliveries(request):
-    valore_temp = random.uniform(-20, 5)
-    if valore_temp > -7:
-        subprocess.run(['telegram-send', "La temperatura è fuori range!"], check=True)
-    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
+def generate_temperature():
+    while True:
+        valore_temp = random.uniform(-20, 5)
+        if valore_temp > -7:
+            subprocess.run(['telegram-send', "La temperatura è fuori range!"], check=True)
+        temperature = Temperature.objects.create(temperatura_registrata=valore_temp)
+        temperature.save()
+        global stop
+        if stop:
+            break
+        time.sleep(5)
+
 
 def driver_enddeliveries(request):
+    global stop
+    stop = True
+    t.join()
     return render(request, 'fine_giro.html')
 
-
+stop = False
+t = threading.Thread(target=generate_temperature)
