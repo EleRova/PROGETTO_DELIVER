@@ -43,20 +43,7 @@
     }
 
     function handleButtonClick(trip_id) {
-
-
-            buttons[currentButtonIndex].disabled = true;
-
-            currentButtonIndex++;
-            if (currentButtonIndex < buttons.length) {
-                buttons[currentButtonIndex].disabled = false;
-            }
-            else {
-                window.location.href = '{% url 'fine' %}';
-            }
-
-            window.location.href = '{% url 'consegna_effettuata' 0 %}'.replace('0',trip_id)
-
+        window.location.href = '{% url 'consegna_effettuata' 0 %}'.replace('0',trip_id)
     }
     for (var i = 0; i < buttons.length; i++){
         if(i != {{ market_id }})

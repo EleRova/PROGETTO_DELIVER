@@ -55,7 +55,7 @@ def generate_temperature():
         time.sleep(5)
 
 
-def driver_enddeliveries(request):
+def driver_end_deliveries(request):
     global stop
     stop = True
     t.join()
@@ -99,7 +99,7 @@ def consegna_effettuata(request, trip_id):
     trip.save()
     del request.session['market_id']
     if market_id == Market.objects.all().__len__():
-        return render(request, 'fine_giro.html')
+        return driver_end_deliveries(request)
     else:
         return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})
 
