@@ -40,7 +40,7 @@ def user_login(request):
 def driver_markets(request):
     t.start()
 
-    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
+    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': 0})
 
 def generate_temperature():
     while True:
@@ -74,7 +74,7 @@ def inizio_consegna(request, market_id):
         request.session['market_id'] = market_id
         print(market_id)
         print(trip.id)
-        return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'trip_id':trip.id})
+        return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'trip_id':trip.id, 'market_id':market_id-1})
     else:
         return JsonResponse({'error':'driver not found in session'})
 
@@ -98,5 +98,8 @@ def consegna_effettuata(request, trip_id):
     trip.ritardo =ritardo
     trip.save()
     del request.session['market_id']
-    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values()})
+    if market_id == Market.objects.all().__len__():
+        return render(request, 'fine_giro.html')
+    else:
+        return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})
 

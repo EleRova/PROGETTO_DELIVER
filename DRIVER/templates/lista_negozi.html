@@ -58,8 +58,9 @@
             window.location.href = '{% url 'consegna_effettuata' 0 %}'.replace('0',trip_id)
 
     }
-    for (var i = 1; i < buttons.length; i++){
-        buttons[i].disabled = true;
+    for (var i = 0; i < buttons.length; i++){
+        if(i != {{ market_id }})
+            buttons[i].disabled = true;
     }
 </script>
 </body>
