@@ -2,12 +2,6 @@
 from django.db import models
 
 
-class Camion(models.Model):
-    targa = models.CharField(max_length=7, unique=True)
-    portata = models.PositiveIntegerField()
-    immatricolazione = models.DateField()
-
-
 class Market(models.Model):
     id_negozio = models.PositiveIntegerField(unique=True)
     nome_negozio = models.CharField(max_length=50)
@@ -16,8 +10,8 @@ class Market(models.Model):
     indirizzo = models.CharField(max_length=100)
     latitudine = models.DecimalField(max_digits=17, decimal_places=15)
     longitudine = models.DecimalField(max_digits=17, decimal_places=15)
-    inizio_fascia_consegna = models.PositiveIntegerField()
-    fine_fascia_consegna = models.PositiveIntegerField()
+    inizio_fascia_consegna = models.TimeField()
+    fine_fascia_consegna = models.TimeField()
 
     def __str__(self):# to string di java
         return str(self.id_negozio) + ' ' + self.nome_negozio + ' ' + self.cellulare
@@ -37,11 +31,11 @@ class Driver(models.Model):
 
 class Trip(models.Model):
     autista = models.ForeignKey(Driver, on_delete=models.CASCADE)
-    targa = models.ForeignKey(Camion, on_delete=models.CASCADE)
     negozio = models.ForeignKey(Market, on_delete=models.CASCADE)
-    data_partenza = models.DateTimeField()
+    data_ora_partenza = models.DateTimeField()
+    data_ora_arrivo = models.DateTimeField(null=True)
     ritardo =models.BooleanField(default=False)
-
+    tempo_ritardo = models.TimeField(null=True)
 
 
 class Temperature(models.Model):

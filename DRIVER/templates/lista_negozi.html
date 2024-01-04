@@ -20,12 +20,12 @@
                             {% endif %}
 
                                 <section>
-                                    <a class='fa fa-map-marker' style="font-size:48px;" href="https://www.google.com/maps?q={{ result.latitudine }},{{ result.longitudine }}" target = "_blank"></a>
+                                    <a class='fa fa-map-marker' style="font-size:48px;" href="{% url 'inizio_consegna' result.id_negozio %}" onclick="openGoogleMaps({{ result.latitudine }},{{ result.longitudine }})"></a>
                                     <h3>{{ result.nome_negozio }}</h3>
                                     <p> {{ result.indirizzo }}</p>
                                     <p> Fascia di consegna: {{ result.inizio_fascia_consegna }} - {{ result.fine_fascia_consegna }} </p>
                                     <ul class="actions special">
-                                    <li><a href="#" class="button primary" onclick="handleButtonClick(this)">Consegna Effettuata</a></li>
+                                    <li><button class="button primary" onclick="handleButtonClick({{ trip_id }})">Consegna Effettuata</button></li>
                                         </ul>
                                 </section>
                             {% if forloop.counter|modulo:2 == 0  %}
@@ -35,27 +35,31 @@
                         {% endfor %}
 					</section>
 <script>
-    var buttons = document.querySelectorAll('a.button');
+    var buttons = document.getElementsByClassName('button primary');
     var currentButtonIndex = 0;
 
-    function handleButtonClick(clickedButton) {
+    function openGoogleMaps(latitudine,longitudine){
+        window.open('https://www.google.com/maps?q='+ latitudine + ',' + longitudine, '_blank');
+    }
+
+    function handleButtonClick(trip_id) {
 
 
-            buttons[currentButtonIndex].classList.add('disabled');
+            buttons[currentButtonIndex].disabled = true;
 
             currentButtonIndex++;
             if (currentButtonIndex < buttons.length) {
-                buttons[currentButtonIndex].classList.remove('disabled');
+                buttons[currentButtonIndex].disabled = false;
             }
             else {
                 window.location.href = '{% url 'fine' %}';
             }
 
+            window.location.href = '{% url 'consegna_effettuata' 0 %}'.replace('0',trip_id)
+
     }
-
-
     for (var i = 1; i < buttons.length; i++){
-        buttons[i].classList.add('disabled');
+        buttons[i].disabled = true;
     }
 </script>
 </body>
