@@ -38,8 +38,10 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 def driver_markets(request):
-    t.start()
-
+    global t
+    if not t.is_alive():
+        t = threading.Thread(target=generate_temperature)
+        t.start()
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': 0})
 
 def generate_temperature():
@@ -57,6 +59,7 @@ def generate_temperature():
 
 def driver_end_deliveries(request):
     global stop
+    global t
     stop = True
     t.join()
     return render(request, 'fine_giro.html')
@@ -90,10 +93,7 @@ def consegna_effettuata(request, trip_id):
     ritardo=False
     if ora_arrivo > fine_ora:
         ritardo = True
-        print(ora_arrivo)
-        print(fine_ora)
         tempo_ritardo = ora_arrivo - fine_ora
-        print(tempo_ritardo)
         trip.tempo_ritardo=str(tempo_ritardo)
     trip.ritardo =ritardo
     trip.save()
