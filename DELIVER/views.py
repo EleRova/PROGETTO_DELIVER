@@ -38,34 +38,24 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 def driver_markets(request):
-    global t
-    if not t.is_alive():
-        t = threading.Thread(target=generate_temperature)
-        t.start()
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': 0})
 
-def generate_temperature():
-    while True:
-        valore_temp = random.uniform(-20, 5)
-        if valore_temp > -7:
-            subprocess.run(['telegram-send', "La temperatura è fuori range!"], check=True)
-        temperature = Temperature.objects.create(temperatura_registrata=valore_temp)
+def send_telegram_message(request):
+    temperature_value=float(request.GET.get('temperature', None))
+    if temperature_value is not None:
+        temperature = Temperature.objects.create(temperatura_registrata=temperature_value)
         temperature.save()
-        global stop
-        if stop:
-            break
-        time.sleep(5)
+        if temperature_value>-7:
+            subprocess.run(['telegram-send', "La temperatura è fuori range!"], check = True)
+    market_id = request.Get.get('market_id', None)
+    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})
 
 
 def driver_end_deliveries(request):
-    global stop
-    global t
-    stop = True
-    t.join()
     return render(request, 'fine_giro.html')
 
-stop = False
-t = threading.Thread(target=generate_temperature)
+
+
 
 
 def inizio_consegna(request, market_id):

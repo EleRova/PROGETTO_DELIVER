@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="{% static 'main.css' %}" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Negozi Giro</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body id="negozi">
 <section class="box special features" style="margin-bottom: 0px;">
@@ -35,9 +36,28 @@
                         {% endfor %}
 					</section>
 <script>
-    var buttons = document.getElementsByClassName('button primary');
-    var currentButtonIndex = 0;
+    let buttons = document.getElementsByClassName('button primary');
+    let currentButtonIndex = 0;
 
+    function generateRandom(min,max){
+        return Math.random() * (max-min) + min;
+    }
+
+    setInterval(generateTemp,5000);
+
+    function generateTemp(){
+        let temp_value = generateRandom(-20,5);
+        $.ajax({
+            url:'{% url 'send_telegram_message' %}',
+            data:{
+                'temperature': temp_value,
+                'market_id':{{ market_id }},
+            },
+            dataType:'json',
+            success: function(){
+            }
+        })
+    }
     function openGoogleMaps(latitudine,longitudine){
         window.open('https://www.google.com/maps?q='+ latitudine + ',' + longitudine, '_blank');
     }
@@ -45,7 +65,7 @@
     function handleButtonClick(trip_id) {
         window.location.href = '{% url 'consegna_effettuata' 0 %}'.replace('0',trip_id)
     }
-    for (var i = 0; i < buttons.length; i++){
+    for (let i = 0; i < buttons.length; i++){
         if(i != {{ market_id }})
             buttons[i].disabled = true;
     }
