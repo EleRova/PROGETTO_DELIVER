@@ -1,0 +1,9 @@
+runtime: python
+api_version: 1
+
+handlers:
+  - url: /static/main.css
+    static_files: static/main.css
+    upload: static/main.css
+  - url: .*
+    script: PROGETTO_DELIVER.wsgi.application
