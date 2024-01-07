@@ -111,14 +111,33 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+import os
+
+PROJECT_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATICFILES_DIRS= [
-    BASE_DIR/ "static",
-]
 STATIC_URL = 'static/'
+
+# for prod environment
+"""
+DEFAULT_FILE_STORAGE = 'gcloud.GoogleCloudMediaFileStorage'
+STATICFILES_STORAGE = 'gcloud.GoogleCloudStaticFileStorage'
+
+GS_PROJECT_ID = 'pcloud3'
+GS_STATIC_BUCKET_NAME = 'deliver_bucket'
+#GS_MEDIA_BUCKET_NAME = 'NAME OF THE MEDIA BUCKET CREATED IN CLOUD STORAGE'  # same as STATIC BUCKET if using single bucket both for static and media
+
+STATIC_URL = 'https://storage.googleapis.com/{}/'.format(GS_STATIC_BUCKET_NAME)
+STATIC_ROOT = "static/"
+
+#MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_MEDIA_BUCKET_NAME)
+MEDIA_ROOT = "media/"
+
+UPLOAD_ROOT = 'media/uploads/'
+
+DOWNLOAD_ROOT = os.path.join(PROJECT_ROOT, "static/media/downloads")
+DOWNLOAD_URL = STATIC_URL + "media/downloads"
+"""
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
