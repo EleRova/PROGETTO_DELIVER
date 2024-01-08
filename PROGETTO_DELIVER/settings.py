@@ -112,7 +112,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
+STATIC_URL = 'DELIVER/static/'
 
 # for prod environment
 """STORAGES = {
