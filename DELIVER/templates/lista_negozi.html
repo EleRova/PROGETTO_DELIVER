@@ -3895,7 +3895,7 @@
 </head>
 <body id="negozi">
 <section class="box special features" style="margin-bottom: 0px;">
-                        <input type="hidden" id="shake" value="shake">
+
                         {% for result in market %}
                             {% if forloop.counter|modulo:2 == 1  %}
                                 <div class="features-row">
@@ -3919,51 +3919,6 @@
 <script>
     let buttons = document.getElementsByClassName('button primary');
     let currentButtonIndex = 0;
-
-    //accelerometro
-    document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-  startWatch();
-}
-
-let watchID;
-function startWatch() {
-  let previousReading = {
-    x: null,
-    y: null,
-    z: null
-  }
- let options = { frequency: 250 };  // Update acceleration every quarter second
-  watchID = navigator.accelerometer.watchAcceleration(function onSuccess(acceleration) {
-    let changes = {},
-    bound = 4;  // this controls the sensitivity for detecting the shake event
-    if (previousReading.x !== null) {
-      changes.x = Math.abs(previousReading.x, acceleration.x);
-      changes.y = Math.abs(previousReading.y, acceleration.y);
-    }
-    alert(previousReading.x);
-    if (changes.x > bound && changes.y > bound) {
-      stopWatch();
-      // We are relying on a hidden button with an ID of shake to be present on the Profound UI Rich Display File screen
-      if (document.getElementById("shake") != null) alert('shake');
-      setTimeout(startWatch, 3000);
-    }
-    previousReading = {
-      x: acceleration.x,
-      y: acceleration.y,
-      z: acceleration.z
-    }
-  }, function onError() {
-    alert('Some problem has occurred in reading the accelerometer.');
-  }, options);
-}
-
-function stopWatch() {
-  if (watchID) {
-    navigator.accelerometer.clearWatch(watchID);
-    watchID = null;
-  }
-}
 
     function generateRandom(min,max){
         return Math.random() * (max-min) + min;
@@ -3994,6 +3949,44 @@ function stopWatch() {
     for (let i = 0; i < buttons.length; i++){
         if(i != {{ market_id }})
             buttons[i].disabled = true;
+    }
+
+    let dt = 100;
+    let endTime = 300;
+    let timeSensed = 0;
+
+    // Start sensing accelerometer data
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      // For newer devices, request permission first
+      DeviceMotionEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            startSensing();
+          } else {
+            console.error('Permission denied for motion sensors');
+          }
+        })
+        .catch(error => console.error('Error requesting motion sensor permission:', error));
+    } else {
+      // For older devices
+      startSensing();
+    }
+
+    function startSensing() {
+      window.addEventListener('devicemotion', handleMotion);
+
+      function handleMotion(event) {
+        const accData = [event.acceleration.x, event.acceleration.y, event.acceleration.z];
+        timeSensed += dt;
+
+        // Print accelerometer data
+        console.log(accData);
+
+        // Stop sensing when the specified time is reached
+        if (timeSensed >= endTime) {
+          window.removeEventListener('devicemotion', handleMotion);
+        }
+      }
     }
 </script>
 </body>

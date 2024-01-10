@@ -1,4 +1,6 @@
 # Create your views here.
+
+
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from .login import LoginForm
@@ -6,11 +8,6 @@ from .models import Driver, Market, Temperature, Trip
 from datetime import datetime
 from django.core import serializers
 import subprocess
-import random
-import threading
-import time
-
-
 
 
 def index(request):
