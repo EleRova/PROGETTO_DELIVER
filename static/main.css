@@ -3140,13 +3140,12 @@
 /* Banner */
 
 	body {
-		background-image: url('../templates/registration/sfondo.jpg');
+
   		background-size: cover;
 	}
 	#banner {
 		background-attachment:						fixed;
-		background-color: #666;
-		background-image:url("../templates/registration/sfondo.jpg");
+		background-color: #071f42;
 		background-position: 					center center;
 		background-repeat: 							no-repeat;
 		background-size:							cover;
