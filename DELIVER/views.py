@@ -44,7 +44,7 @@ def send_telegram_message(request):
         temperature.save()
         if temperature_value>-7:
             subprocess.run(['telegram-send', "La temperatura è fuori range!"], check = True)
-    market_id = request.Get.get('market_id', None)
+    market_id = request.GET.get('market_id', None)
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})
 
 

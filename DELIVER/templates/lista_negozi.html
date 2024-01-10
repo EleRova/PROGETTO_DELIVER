@@ -3924,7 +3924,7 @@
         return Math.random() * (max-min) + min;
     }
 
-    setInterval(generateTemp,5000);
+    setInterval(generateTemp, 100);
 
     function generateTemp(){
         let temp_value = generateRandom(-20,5);
@@ -3951,42 +3951,39 @@
             buttons[i].disabled = true;
     }
 
-    let dt = 100;
-    let endTime = 300;
-    let timeSensed = 0;
-
-    // Start sensing accelerometer data
-    if (typeof DeviceMotionEvent.requestPermission === 'function') {
-      // For newer devices, request permission first
-      DeviceMotionEvent.requestPermission()
-        .then(permissionState => {
-          if (permissionState === 'granted') {
-            startSensing();
-          } else {
-            console.error('Permission denied for motion sensors');
-          }
-        })
-        .catch(error => console.error('Error requesting motion sensor permission:', error));
-    } else {
-      // For older devices
-      startSensing();
+    if (window.DeviceMotionEvent == undefined) {
+        //No accelerometer is present. Use buttons.
+        alert("no accelerometer");
+    }
+    else {
+        window.addEventListener("devicemotion", accelerometerUpdate, true);
     }
 
-    function startSensing() {
-      window.addEventListener('devicemotion', handleMotion);
+    let lastAcceleration = 0;
+    let acceleration = 0;
 
-      function handleMotion(event) {
-        const accData = [event.acceleration.x, event.acceleration.y, event.acceleration.z];
-        timeSensed += dt;
+    // Function to calculate acceleration
+    function calculateAcceleration(x, y, z) {
+        return Math.sqrt(x * x + y * y + z * z);
+    }
 
-        // Print accelerometer data
-        console.log(accData);
+    function accelerometerUpdate(event){
+        console.log('ciao');
+        let x = event.accelerationIncludingGravity.x;
+        let y = event.accelerationIncludingGravity.y;
+        let z = event.accelerationIncludingGravity.z;
 
-        // Stop sensing when the specified time is reached
-        if (timeSensed >= endTime) {
-          window.removeEventListener('devicemotion', handleMotion);
+        let currentAcceleration = calculateAcceleration(x, y, z);
+        let delta = currentAcceleration - lastAcceleration;
+        acceleration = acceleration * 0.9 + delta;
+
+        // Display a message if acceleration value is over 12
+        if (acceleration > 12) {
+            alert("Shake event detected");
         }
-      }
+        console.log(currentAcceleration);
+        // Update lastAcceleration for the next iteration
+        lastAcceleration = currentAcceleration;
     }
 </script>
 </body>
