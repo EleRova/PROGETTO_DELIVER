@@ -3954,6 +3954,7 @@
     if (window.DeviceMotionEvent == undefined) {
         //No accelerometer is present. Use buttons.
         alert("no accelerometer");
+        window.addEventListener("devicemotion", accelerometerUpdate, true);
     }
     else {
         window.addEventListener("devicemotion", accelerometerUpdate, true);
