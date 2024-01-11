@@ -3894,6 +3894,20 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body id="negozi">
+<div id="content">
+    <h1>Accelerometer Javascript Test</h1>
+    <div id="sphere"></div>
+<ul>
+	<li>acceleration x: <span id="accelerationX"></span>g</li>
+	<li>acceleration y: <span id="accelerationY"></span>g</li>
+	<li>acceleration z: <span id="accelerationZ"></span>g</li>
+	<li>rotation alpha: <span id="rotationAlpha"></span>degree</li>
+	<li>rotation beta: <span id="rotationBeta"></span>degree</li>
+	<li>rotation gamma: <span id="rotationGamma"></span>degree</li>
+</ul>
+
+test: <span id="test"></span>
+</div>
 <section class="box special features" style="margin-bottom: 0px;">
 
                         {% for result in market %}
@@ -3924,7 +3938,7 @@
         return Math.random() * (max-min) + min;
     }
 
-    setInterval(generateTemp, 100);
+    setInterval(generateTemp, 5000);
 
     function generateTemp(){
         let temp_value = generateRandom(-20,5);
@@ -3951,41 +3965,63 @@
             buttons[i].disabled = true;
     }
 
-    if (window.DeviceMotionEvent == undefined) {
-        //No accelerometer is present. Use buttons.
-        alert("no accelerometer");
-        window.addEventListener("devicemotion", accelerometerUpdate, true);
+
+var x = 0, y = 0,
+    vx = 0, vy = 0,
+	ax = 0, ay = 0;
+
+if (window.DeviceMotionEvent != undefined) {
+	window.ondevicemotion = function(e) {
+		ax = e.accelerationIncludingGravity.x * 5;
+		ay = e.accelerationIncludingGravity.y * 5;
+		document.getElementById("accelerationX").innerHTML = e.accelerationIncludingGravity.x;
+		document.getElementById("accelerationY").innerHTML = e.accelerationIncludingGravity.y;
+		document.getElementById("accelerationZ").innerHTML = e.accelerationIncludingGravity.z;
+
+		if ( e.rotationRate ) {
+			document.getElementById("rotationAlpha").innerHTML = e.rotationRate.alpha;
+			document.getElementById("rotationBeta").innerHTML = e.rotationRate.beta;
+			document.getElementById("rotationGamma").innerHTML = e.rotationRate.gamma;
+		}
+	}
+
+	setInterval( function() {
+		var landscapeOrientation = window.innerWidth/window.innerHeight > 1;
+		if ( landscapeOrientation) {
+			vx = vx + ay;
+			vy = vy + ax;
+		} else {
+			vy = vy - ay;
+			vx = vx + ax;
+		}
+		vx = vx * 0.98;
+		vy = vy * 0.98;
+		y = parseInt(y + vy / 50);
+		x = parseInt(x + vx / 50);
+
+		boundingBoxCheck();
+
+		sphere.style.top = y + "px";
+		sphere.style.left = x + "px";
+
+    var i;
+    for (i = 0; i < x.length; i++) {
+        x[i].style.top = y + "px";
+    		x[i].style.left = x + "px";
     }
-    else {
-        window.addEventListener("devicemotion", accelerometerUpdate, true);
-    }
 
-    let lastAcceleration = 0;
-    let acceleration = 0;
+	}, 25);
+}
 
-    // Function to calculate acceleration
-    function calculateAcceleration(x, y, z) {
-        return Math.sqrt(x * x + y * y + z * z);
-    }
 
-    function accelerometerUpdate(event){
-        console.log('ciao');
-        let x = event.accelerationIncludingGravity.x;
-        let y = event.accelerationIncludingGravity.y;
-        let z = event.accelerationIncludingGravity.z;
+function boundingBoxCheck(){
+	if (x<0) { x = 0; vx = -vx; }
+	if (y<0) { y = 0; vy = -vy; }
+	if (x>document.documentElement.clientWidth-20) { x = document.documentElement.clientWidth-20; vx = -vx; }
+	if (y>document.documentElement.clientHeight-20) { y = document.documentElement.clientHeight-20; vy = -vy; }
 
-        let currentAcceleration = calculateAcceleration(x, y, z);
-        let delta = currentAcceleration - lastAcceleration;
-        acceleration = acceleration * 0.9 + delta;
+}
 
-        // Display a message if acceleration value is over 12
-        if (acceleration > 12) {
-            alert("Shake event detected");
-        }
-        alert(currentAcceleration);
-        // Update lastAcceleration for the next iteration
-        lastAcceleration = currentAcceleration;
-    }
 </script>
 </body>
 </html>
