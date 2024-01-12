@@ -40,7 +40,7 @@ def driver_markets(request):
 def send_telegram_message(request):
     temperature_value=float(request.GET.get('temperature', None))
     if temperature_value is not None:
-        temperature = Temperature.objects.create(temperatura_registrata=temperature_value)
+        temperature = Temperature.objects.create(temperatura_registrata=temperature_value, data_ora_rilevamento=datetime.now())
         temperature.save()
         if temperature_value>-7:
             subprocess.run(['telegram-send', "La temperatura è fuori range!"], check = True)

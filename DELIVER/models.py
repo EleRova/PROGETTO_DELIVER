@@ -40,3 +40,4 @@ class Trip(models.Model):
 
 class Temperature(models.Model):
     temperatura_registrata = models.FloatField()
+    data_ora_rilevamento = models.DateTimeField(null=True)
