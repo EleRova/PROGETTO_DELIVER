@@ -1,5 +1,5 @@
 # Create your views here.
-
+import os
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
@@ -8,7 +8,10 @@ from .models import Driver, Market, Temperature, Trip
 from datetime import datetime
 from django.core import serializers
 import subprocess
+from google.cloud import bigquery
 
+credential_path = "DELIVER/templates/credentials.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 def index(request):
     return HttpResponse("Hello, world. You're at the PCC index.")
@@ -40,19 +43,27 @@ def driver_markets(request):
 def send_telegram_message(request):
     temperature_value=float(request.GET.get('temperature', None))
     if temperature_value is not None:
-        temperature = Temperature.objects.create(temperatura_registrata=temperature_value, data_ora_rilevamento=datetime.now())
+        data_ora=datetime.now()
+        temperature = Temperature.objects.create(temperatura_registrata=temperature_value, data_ora_rilevamento=data_ora)
         temperature.save()
+        insert_bigquery_temp('pcloud-407811', 'deliver_dataset', 'temperature', temperature_value, data_ora)
         if temperature_value>-7:
             subprocess.run(['telegram-send', "La temperatura è fuori range!"], check = True)
     market_id = request.GET.get('market_id', None)
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})
 
+def insert_bigquery_temp(project_id,dataset_id,table_id, temperature_value, data_ora):
+    client = bigquery.Client()
+    table_full_id = f'{project_id}.{dataset_id}.{table_id}'
+    errors = client.insert_rows_json(table_full_id, [{'temperatura_registrata':temperature_value, 'data_ora_rilevamento':data_ora.strftime('%Y-%m-%d %H:%M:%S')}])  # Make an API request.
+    if errors == []:
+        print("New rows have been added.")
+    else:
+        print("Encountered errors while inserting rows: {}".format(errors))
+    return
 
 def driver_end_deliveries(request):
     return render(request, 'fine_giro.html')
-
-
-
 
 
 def inizio_consegna(request, market_id):
@@ -82,11 +93,27 @@ def consegna_effettuata(request, trip_id):
         ritardo = True
         tempo_ritardo = ora_arrivo - fine_ora
         trip.tempo_ritardo=str(tempo_ritardo)
+    else:
+        tempo_ritardo = '00:00:00'
     trip.ritardo =ritardo
     trip.save()
+    insert_bigquery_rit('pcloud-407811', 'deliver_dataset', 'Ritardi', trip.data_ora_partenza, trip.data_ora_arrivo, ritardo, trip.autista.id_autista, trip.negozio.id_negozio, tempo_ritardo)
     del request.session['market_id']
     if market_id == Market.objects.all().__len__():
         return driver_end_deliveries(request)
     else:
         return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': -1})
 
+def insert_bigquery_rit(project_id,dataset_id,table_id, data_ora_partenza, data_ora_arrivo, ritardo, autista, negozio, tempo_ritardo ):
+    client = bigquery.Client()
+    table_full_id = f'{project_id}.{dataset_id}.{table_id}'
+    if ritardo == True:
+        ritardo = 1
+    else:
+        ritardo = 0
+    errors = client.insert_rows_json(table_full_id, [{'data_ora_partenza':data_ora_partenza.strftime('%Y-%m-%d %H:%M:%S'), 'data_ora_arrivo':data_ora_arrivo.strftime('%Y-%m-%d %H:%M:%S'), 'ritardo':ritardo, 'autista_id':autista, 'negozio_id':negozio, 'tempo_ritardo':str(tempo_ritardo)}])  # Make an API request.
+    if errors == []:
+        print("New rows have been added.")
+    else:
+        print("Encountered errors while inserting rows: {}".format(errors))
+    return

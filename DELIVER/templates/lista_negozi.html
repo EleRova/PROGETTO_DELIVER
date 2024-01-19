@@ -77,7 +77,7 @@
 	ax = 0, ay = 0;
 
 
-    alert(window.DeviceMotionEvent);
+    //alert(window.DeviceMotionEvent);
 if (window.DeviceMotionEvent != undefined) {
 	window.ondevicemotion = function(e) {
 		ax = e.accelerationIncludingGravity.x * 5;
@@ -85,7 +85,7 @@ if (window.DeviceMotionEvent != undefined) {
         az = e.accelerationIncludingGravity.z * 5;
 
 		if ( e.rotationRate ) {
-			alert('urto');
+			//alert('urto');
 		}
 	}
 
