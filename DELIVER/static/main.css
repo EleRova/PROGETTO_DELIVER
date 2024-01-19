@@ -95,7 +95,9 @@
 		}
 
 	}
-
+body {
+		background: #071f42;
+	}
 	html {
 		box-sizing: border-box;
 	}
@@ -104,9 +106,7 @@
 		box-sizing: inherit;
 	}
 
-	body {
-		background: #f5f5f5;
-	}
+
 
 	body, input, select, textarea {
 		color: #777;
@@ -3140,7 +3140,6 @@
 /* Banner */
 
 	body {
-
   		background-size: cover;
 	}
 	#banner {

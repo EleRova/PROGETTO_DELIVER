@@ -35,7 +35,7 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 def driver_markets(request):
-    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': 0})
+    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': -1})
 
 def send_telegram_message(request):
     temperature_value=float(request.GET.get('temperature', None))
@@ -88,5 +88,5 @@ def consegna_effettuata(request, trip_id):
     if market_id == Market.objects.all().__len__():
         return driver_end_deliveries(request)
     else:
-        return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})
+        return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': -1})
 
