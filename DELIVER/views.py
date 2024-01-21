@@ -38,7 +38,10 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 def driver_markets(request):
-    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': -1})
+    driver = list(serializers.deserialize("json", request.session.get('driver', None)))
+    driver_data=driver[0].object
+    print(driver_data)
+    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': -1, 'driver': driver_data})
 
 def send_telegram_message(request):
     temperature_value=float(request.GET.get('temperature', None))
@@ -117,3 +120,9 @@ def insert_bigquery_rit(project_id,dataset_id,table_id, data_ora_partenza, data_
     else:
         print("Encountered errors while inserting rows: {}".format(errors))
     return
+
+def urto(request):
+    driver = request.GET.get('driver', None)
+    subprocess.run(['telegram-send', "L'autista "+driver+" ha avuto un incidente!"], check=True)
+    market_id = request.GET.get('market_id', None)
+    return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})
