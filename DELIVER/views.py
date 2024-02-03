@@ -120,6 +120,6 @@ def insert_bigquery_rit(project_id,dataset_id,table_id, data_ora_partenza, data_
     return
 
 def urto(request):
-    subprocess.run(['telegram-send', "L'autista ha avuto un incidente!"], check=True)
+    subprocess.run(['telegram-send', "La merce ha subito un urto durante la consegna, potrebbe essere danneggiata!"], check=True)
     market_id = request.GET.get('market_id', None)
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})

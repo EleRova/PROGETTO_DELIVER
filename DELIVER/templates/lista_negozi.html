@@ -28,7 +28,8 @@
                                     <p> {{ result.indirizzo }}</p>
                                     <p> Fascia di consegna: {{ result.inizio_fascia_consegna }} - {{ result.fine_fascia_consegna }} </p>
                                     <ul class="actions special">
-                                    <li><button class="button primary" onclick="handleButtonClick({{ trip_id }})">Consegna Effettuata</button></li>
+                                        <li><button class="button primary 1" onclick="handleChange({{ market_id }})">In fase di consegna</button></li>
+                                    <li><button class="button primary 2" onclick="handleButtonClick({{ trip_id }})">Consegna Effettuata</button></li>
                                         </ul>
                                 </section>
                             {% if forloop.counter|modulo:2 == 0  %}
@@ -38,7 +39,9 @@
                         {% endfor %}
 					</section>
 <script>
-    let buttons = document.getElementsByClassName('button primary');
+    let buttons_1 = document.getElementsByClassName('button primary 1');
+    let buttons_2 = document.getElementsByClassName('button primary 2');
+
     let currentButtonIndex = 0;
 
     function generateRandom(min,max){
@@ -69,9 +72,15 @@
     function handleButtonClick(trip_id) {
         window.location.href = '{% url 'consegna_effettuata' 0 %}'.replace('0',trip_id)
     }
-    for (let i = 0; i < buttons.length; i++){
+    for (let i = 0; i < buttons_1.length; i++){
         if(i != {{ market_id }})
-            buttons[i].disabled = true;
+            buttons_1[i].disabled = true;
+        buttons_2[i].disabled = true;
+
+    }
+    function handleChange(id) {
+        buttons_1[id].disabled = true;
+        buttons_2[id].disabled = false;
     }
 
 
@@ -88,7 +97,7 @@ if (window.DeviceMotionEvent != undefined) {
     setInterval( function() {
         let totalAcceleration= Math.sqrt(ax*ax + ay*ay + az*az);
         let threshold = 30;
-        if (incidente == false) {
+        if (incidente == false && !buttons_2[{{ market_id }}]) {
                 if (totalAcceleration > threshold){
                         $.ajax({
                                 url:'{% url 'urto' %}',
