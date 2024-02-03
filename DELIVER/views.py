@@ -13,9 +13,6 @@ from google.cloud import bigquery
 credential_path = "DELIVER/templates/credentials.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the PCC index.")
-
 
 def user_login(request):
     if request.method == 'POST':
@@ -47,6 +44,7 @@ def send_telegram_message(request):
     temperature_value=float(request.GET.get('temperature', None))
     if temperature_value is not None:
         data_ora=datetime.now()
+        print(temperature_value)
         temperature = Temperature.objects.create(temperatura_registrata=temperature_value, data_ora_rilevamento=data_ora)
         temperature.save()
         insert_bigquery_temp('pcloud-407811', 'deliver_dataset', 'temperature', temperature_value, data_ora)
@@ -122,7 +120,6 @@ def insert_bigquery_rit(project_id,dataset_id,table_id, data_ora_partenza, data_
     return
 
 def urto(request):
-    driver = request.GET.get('driver', None)
-    subprocess.run(['telegram-send', "L'autista "+driver+" ha avuto un incidente!"], check=True)
+    subprocess.run(['telegram-send', "L'autista ha avuto un incidente!"], check=True)
     market_id = request.GET.get('market_id', None)
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})

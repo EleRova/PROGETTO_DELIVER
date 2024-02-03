@@ -49,10 +49,12 @@
 
     function generateTemp(){
         let temp_value = generateRandom(-20,5);
+        let accelerometer_value = generateRandom(0,15);
         $.ajax({
             url:'{% url 'send_telegram_message' %}',
             data:{
                 'temperature': temp_value,
+                'accelerometer': accelerometer_value,
                 'market_id':{{ market_id }},
             },
             dataType:'json',
@@ -76,33 +78,31 @@
 	let ax = 0, ay = 0, az = 0;
 
 
-    //alert(window.DeviceMotionEvent);
 if (window.DeviceMotionEvent != undefined) {
-	window.ondevicemotion = function(e) {
-		ax = e.accelerationIncludingGravity.x;
-		ay = e.accelerationIncludingGravity.y;
+        window.ondevicemotion = function(e) {
+                ax = e.accelerationIncludingGravity.x;
+                ay = e.accelerationIncludingGravity.y;
         az = e.accelerationIncludingGravity.z;
-	}
-
-    setInterval( function() {
-		let totalAcceleration= Math.sqrt(ax*ax + ay*ay + az*az);
-        let threshold = 10;
-        if (totalAcceleration > threshold){
-            $.ajax({
-                url:'{% url 'urto' %}',
-                data:{
-                    'driver':"{{ driver.nome }}",
-                    'market_id':{{ market_id }},
-                },
-                dataType:'json',
-                success: function(){
-                }
-            })
         }
-	}, 25);
-}
-else{
-    alert('no accelerometer');
+    let incidente = false;
+    setInterval( function() {
+        let totalAcceleration= Math.sqrt(ax*ax + ay*ay + az*az);
+        let threshold = 30;
+        if (incidente == false) {
+                if (totalAcceleration > threshold){
+                        $.ajax({
+                                url:'{% url 'urto' %}',
+                                data:{
+                                        'market_id':{{ market_id }},
+                                },
+                                dataType:'json',
+                                success: function(){
+                                }
+                        })
+                        incidente = true;
+                }
+        }
+    }, 25);
 }
 
 
