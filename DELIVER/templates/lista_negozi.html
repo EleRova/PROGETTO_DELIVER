@@ -48,11 +48,11 @@
         return Math.random() * (max-min) + min;
     }
 
-    setInterval(generateTemp, 5000);
+    setInterval(generate, 5000);
 
-    function generateTemp(){
+    function generate(){
         let temp_value = generateRandom(-20,5);
-        let accelerometer_value = generateRandom(0,15);
+        let accelerometer_value = generateRandom(0,45);
         $.ajax({
             url:'{% url 'send_telegram_message' %}',
             data:{

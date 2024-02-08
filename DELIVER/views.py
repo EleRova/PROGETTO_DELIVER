@@ -50,6 +50,10 @@ def send_telegram_message(request):
         insert_bigquery_temp('pcloud-407811', 'deliver_dataset', 'temperature', temperature_value, data_ora)
         if temperature_value>-7:
             subprocess.run(['telegram-send', "La temperatura è fuori range!"], check = True)
+    accelerometer_value = float(request.GET.get('accelerometer', None))
+    if accelerometer_value is not None:
+        if accelerometer_value>-7:
+            subprocess.run(['telegram-send', "L'autista ha avuto un incidente!"], check = True)
     market_id = request.GET.get('market_id', None)
     return render(request, 'lista_negozi.html', {'market': Market.objects.all().values(), 'market_id': market_id})
 
