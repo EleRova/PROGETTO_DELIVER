@@ -13,7 +13,6 @@ from google.cloud import bigquery
 credential_path = "DELIVER/templates/credentials.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
-
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -21,7 +20,6 @@ def user_login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             queryset = Driver.objects.filter(username=username, password=password)
-
             if queryset.exists():
                 # Do something if the values exist in the database
                 request.session['driver']= serializers.serialize('json', [queryset.first()])
@@ -29,7 +27,6 @@ def user_login(request):
             else:
                 # Do something if the values don't exist in the database
                 return render(request, 'login.html', {'form': form, 'error': 'Invalid login credentials'})
-
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
@@ -69,7 +66,6 @@ def insert_bigquery_temp(project_id,dataset_id,table_id, temperature_value, data
 
 def driver_end_deliveries(request):
     return render(request, 'fine_giro.html')
-
 
 def inizio_consegna(request, market_id):
     driver = list(serializers.deserialize("json", request.session.get('driver', None)))

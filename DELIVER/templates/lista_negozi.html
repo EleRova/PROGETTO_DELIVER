@@ -39,9 +39,8 @@
 <script>
     let buttons_1 = document.getElementsByClassName('button primary 1');
     let buttons_2 = document.getElementsByClassName('button primary 2');
-
     let currentButtonIndex = 0;
-
+    let incidente = false;
     function generateRandom(min,max){
         return Math.random() * (max-min) + min;
     }
@@ -50,7 +49,11 @@
 
     function generate(){
         let temp_value = generateRandom(-20,5);
-        let accelerometer_value = generateRandom(0,45);
+        let accelerometer_value = 0;
+        if (incidente == false)
+            accelerometer_value = generateRandom(0,45);
+        if (accelerometer_value > 30)
+            incidente = true;
         $.ajax({
             url:'{% url 'send_telegram_message' %}',
             data:{
